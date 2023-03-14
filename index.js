@@ -1,10 +1,14 @@
 const express = require("express");
 const  mongoose  = require("mongoose");
 const app = express();
+require('dotenv').config()
+
 const router = require("./Router/Router")
 const cors = require("cors");
 const path = require("path");
-const dburl = "mongodb+srv://soolya:Xks5Nj3n5njrcYlp@soolyacluster.upoumpf.mongodb.net/soolyaDB?retryWrites=true&w=majority"
+const dburl = process.env.DB;
+const url = process.env.PORT;
+
 const subcategory_router = require("./Router/subcategory_route");
 const service_router = require("./Router/service_route");
 const serviceman_route = require("./Router/serviceman_route");
@@ -52,13 +56,13 @@ mongoose.connect(dburl,(err)=>{
 
 
 
-app.listen(3001,(err) => {
+app.listen(url,(err) => {
     if(err){
         console.log(err);
     }
     
 
     else{
-        console.log("server started on 3001 port");
+        console.log(`server started on ${url} port`);
     }
 })
