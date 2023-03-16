@@ -3,9 +3,7 @@ const Vendor_register_router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (id) => {
-    return jwt.sign({ id }, "soolya vendor super secret key", {
-        expiresIn: maxAge,
-    });
+    return jwt.sign({ id }, "soolya vendor super secret key",);
 };
 
 const createToken2 = (id) => {
@@ -24,11 +22,11 @@ const handleErrors = (err) => {
     // }
 
     if (err.message === "incorrect email") {
-        errors.Email = "That email is not registered";
+        errors.Email = "email is not registered";
     }
 
     if (err.message === "incorrect password") {
-        errors.Password = "That password is incorrect";
+        errors.Password = "Invalid Password";
     }
 
     if (err.code === 11000) {
@@ -79,8 +77,8 @@ Vendor_register_router.post("/register", async (req, res, next) => {
   
       res.cookie("vjwt", token, {
         withCredentials: true,
-        httpOnly: false,
-        maxAge: maxAge * 1000,
+        httpOnly: false
+       
       });
   
       res.status(201).json({ Vendor: Vendor_register_Schema, created: true });
@@ -92,17 +90,31 @@ Vendor_register_router.post("/register", async (req, res, next) => {
   });
 
 
+
   Vendor_register_router.post("/login",  async (req, res) => {
     const { Email, Password } = req.body;
     try {
       const Vendor_register_Schema = await Vendor_register_schema.login(Email, Password);
       const token = createToken2(Vendor_register_Schema._id);
       res.cookie("vjwt2", token, { httpOnly: false, maxAge: maxAge * 1000 });
-      res.status(200).json({ Vendor_register_schema: Vendor_register_schema._id, status: true });
+      res.status(200).json({ Vendor_login: Vendor_register_Schema._id, status: true });
     } catch (err) {
       const errors = handleErrors(err);
       res.json({ errors, status: false });
     }
   });
+
+  Vendor_register_router.get("/fetch",async(req,res) => {
+    const getbyid = await Vendor_register_schema.find()
+    await getbyid.save()
+    res.json(getbyid)
+  })
+    
+
+  Vendor_register_router.get("/fetch_by_id/:id",async(req,res) => {
+    const getbyid = await Vendor_register_schema.findById(req.params.id)
+    await getbyid.save()
+    res.json(getbyid)
+  })
     
 module.exports = Vendor_register_router;

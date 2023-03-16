@@ -5,9 +5,7 @@ const nodemailer = require('nodemailer');
 const auth_router = require("express").Router();
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (id) => {
-  return jwt.sign({ id }, "soolya super secret key", {
-    expiresIn: maxAge,
-  });
+  return jwt.sign({ id }, "soolya super secret key", );
 };
 
 const createToken2 = (id) => {
@@ -81,7 +79,6 @@ auth_router.post("/", (req, res, next) => {
       res.cookie("jwt", token, {
         withCredentials: true,
         httpOnly: false,
-        maxAge: maxAge * 1000,
       });
   
       res.status(201).json({ user: user, created: true });

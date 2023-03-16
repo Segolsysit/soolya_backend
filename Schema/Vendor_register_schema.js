@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-    const Vendor_register_schema = mongoose.Schema({
+    const Vendor_register_schema = new mongoose.Schema({
         Username:{
             type:String   
         },
         Email:{
-            type:String
+            type:String,
+            unique: true
         },
         Password:{
             type:String
